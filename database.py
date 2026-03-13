@@ -5,7 +5,7 @@ from psycopg import Error
 
 load_dotenv()
 
-def conexao():
+def connect():
     try:
         conn = psycopg.connect(
         host = os.getenv("DB_HOST"),
@@ -14,14 +14,14 @@ def conexao():
         password = os.getenv("DB_PASSWORD"),
         port = os.getenv("DB_PORT")
     )
-        print("Conectado com sucesso!")
+        print("Connected successfully!")
         return conn
         
     except Error as e:
-        print(f"Erro ao conectar: {e}")
+        print(f"Connection error: {e}")
         return None
         
-def encerra_conexao(conn):
+def close_connection(conn):
     if conn:
         conn.close()
-        print("Conexão encerrada com o banco de dados!")
+        print("Connection closed!")
