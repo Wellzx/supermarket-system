@@ -1,4 +1,4 @@
-from database import connect
+from modules.database import connect
 
 def criar_categoria(nome):
     try:

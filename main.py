@@ -1,4 +1,4 @@
-from database import connect, close_connection
+from modules.database import connect, close_connection
 
 def main():
     ...
