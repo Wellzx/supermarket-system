@@ -11,8 +11,7 @@ def criar_categoria(nome):
         print(f"Categoria {nome} criada!")
     except Exception as e:
         print(f"Erro: {e}")
-        
-        
+           
 def listar_categorias():
     try:
         with connect() as conn:
@@ -23,7 +22,7 @@ def listar_categorias():
                 if not categorias:
                     print("Nenhuma categoria encontrada.")
                 for categoria in categorias:
-                    print(f"ID: {categoria[0]} NOME: {categoria[1]}")
+                    print(f"ID: {categoria[0]} Nome: {categoria[1]}")
     except Exception as e:
         print(f"Erro: {e}")
         
@@ -80,5 +79,4 @@ def menu_categorias():
                 print("Voce saiu do sistema.")
                 break
             case _:
-                print("Opção inválida")
-                
+                print("Opção inválida")     

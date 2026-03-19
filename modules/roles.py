@@ -12,7 +12,6 @@ def criar_cargo(nome, salario_base):
     except Exception as e:
             print(f"Erro: {e}")
             
-            
 def listar_cargo():
     try:
         with connect() as conn:
@@ -23,7 +22,7 @@ def listar_cargo():
                 if not cargos:
                     print("Nenhum cargo encontrado.")
                 for cargo in cargos:
-                    print(f"ID: {cargo[0]} NOME: {cargo[1]} SALARIO BASE: {cargo[2]}")
+                    print(f"ID: {cargo[0]} Nome: {cargo[1]} Salário base: {cargo[2]}")
     except Exception as e:
         print(f"Error: {e}")
         
@@ -32,12 +31,11 @@ def atualizar_cargo(id, nome, salario_base):
         with connect() as conn:
             with conn.cursor() as cur:
                 cmd_atualizar_cargo = "UPDATE roles SET name = %s, base_salary = %s WHERE id = %s"
-                valores = (id, nome, salario_base)
+                valores = (nome, salario_base, id)
                 cur.execute(cmd_atualizar_cargo, valores)
         print("Cargo atualizado!")
     except Exception as e:
         print(f"Erro: {e}")
-        
         
 def deletar_cargo(id):
     try:
@@ -50,7 +48,6 @@ def deletar_cargo(id):
     except Exception as e:
         print(f"Erro: {e}")
         
-
 def menu_cargo():
     while True:
         print("\n=== Cargo ===")
