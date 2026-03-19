@@ -71,7 +71,7 @@ def menu_cargo():
                 salario_base_cargo = float(input("Salario base: "))
                 criar_cargo(nome_cargo, salario_base_cargo)
             case "3":
-                listar_cargo
+                listar_cargo()
                 id = int(input("ID: "))
                 nome = input("Nome: ")
                 salario_base = float(input("Salario base: "))
