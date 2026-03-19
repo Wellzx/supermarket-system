@@ -1,10 +1,11 @@
+import os
 from modules.database import connect
 
 def criar_categoria(nome):
     try:
         with connect() as conn:
             with conn.cursor() as cur:
-                cmd_insert = "INSERT INTO categories (nome) VALUES (%s)"
+                cmd_insert = "INSERT INTO categories (name) VALUES (%s)"
                 valores = (nome,)
                 cur.execute(cmd_insert, valores)
         print(f"Categoria {nome} criada!")
@@ -58,6 +59,7 @@ def menu_categorias():
         print("0 - Back")
         
         option = input("\nEscolha a opçao: ")
+        os.system("clear")
         
         match option:
             case "1":

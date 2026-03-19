@@ -14,9 +14,7 @@ def connect():
         password = os.getenv("DB_PASSWORD"),
         port = os.getenv("DB_PORT")
     )
-        print("Connected successfully!")
-        return conn
-        
+        return conn   
     except Error as e:
         print(f"Connection error: {e}")
         return None
