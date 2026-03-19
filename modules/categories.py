@@ -5,9 +5,9 @@ def criar_categoria(nome):
     try:
         with connect() as conn:
             with conn.cursor() as cur:
-                cmd_insert = "INSERT INTO categories (name) VALUES (%s)"
+                cmd_criar_categoria = "INSERT INTO categories (name) VALUES (%s)"
                 valores = (nome,)
-                cur.execute(cmd_insert, valores)
+                cur.execute(cmd_criar_categoria, valores)
         print(f"Categoria {nome} criada!")
     except Exception as e:
         print(f"Erro: {e}")
@@ -51,30 +51,30 @@ def deletar_categoria(id):
         
 def menu_categorias():
     while True:
-        print("\n=== CATEGORIES ===")
-        print("1 - List categories")
-        print("2 - Create category")
-        print("3 - Update category")
-        print("4 - Delete category")
-        print("0 - Back")
+        print("\n=== Categorias ===")
+        print("1 - Listar categoria")
+        print("2 - Criar categoria")
+        print("3 - Atualizar categoria")
+        print("4 - Deletar categoria")
+        print("0 - Sair")
         
-        option = input("\nEscolha a opçao: ")
+        option = input("\nEscolha a opção: ")
         os.system("clear")
         
         match option:
             case "1":
                 listar_categorias()
             case "2":
-                nome_categoria = input("Nome da categoria: ")
+                nome_categoria = input("Nome: ")
                 criar_categoria(nome_categoria)
             case "3":
                 listar_categorias()
-                id = int(input("ID da categoria: "))
-                nome = input("Nome da categoria: ")
+                id = int(input("ID: "))
+                nome = input("Nome: ")
                 atualizar_categoria(id, nome)
             case "4":
                 listar_categorias()
-                id = int(input("ID da categoria: "))
+                id = int(input("ID: "))
                 deletar_categoria(id)
             case "0":
                 print("Voce saiu do sistema.")
