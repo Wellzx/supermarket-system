@@ -1,4 +1,5 @@
-from database import connect
+import os
+from modules.database import connect
 from psycopg import errors
 
 
@@ -36,7 +37,7 @@ def list_employees():
                 e.bonus_salary,
                 r.base_salary + e.bonus_salary AS total_salary
                 FROM employees e
-                OIN roles r ON e.role_id = r.id
+                JOIN roles r ON e.role_id = r.id
                 ORDER BY e.name
                 """
                 cur.execute(query)
@@ -106,15 +107,17 @@ def menu_employees():
         print("4 - Delete employee")
         print("0 - Back")
 
-        match input("\nChoose: "):
+        option = input("\nChoose: ")
+        os.system("clear")
 
+        match option:
             case "1":
                 list_employees()
 
             case "2":
+                list_employees()
                 name = input("Name: ")
                 cpf = input("CPF: ")
-                list_employees()
                 role_id = int(input("Role ID: "))
                 bonus_input = input("Bonus salary (leave blank for 0): ").strip()
                 bonus_salary = float(bonus_input) if bonus_input else 0

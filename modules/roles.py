@@ -1,5 +1,5 @@
 import os
-from database import connect
+from modules.database import connect
 from psycopg import errors
 
 
