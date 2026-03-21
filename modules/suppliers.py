@@ -1,86 +1,100 @@
 import os
-from modules.database import connect
+from database import connect
+from psycopg import errors
 
-def criar_fornecedor(nome, telefone, email):
+
+def create_supplier(name, phone, email):
     try:
         with connect() as conn:
             with conn.cursor() as cur:
-                cmd_criar_fornecedor = "INSERT INTO suppliers (name, phone, email) VALUES (%s, %s, %s)"
-                valores = (nome, telefone, email)
-                cur.execute(cmd_criar_fornecedor, valores)
-        print(f"Fornecedor {nome} criado!")
-    except Exception as e:
-            print(f"Erro: {e}")
-            
-def listar_fornecedor():
-    try:
-        with connect() as conn:
-            with conn.cursor() as cur:
-                cmd_listar_fornecedor = "SELECT * FROM suppliers"
-                cur.execute(cmd_listar_fornecedor)
-                fornecedores = cur.fetchall()
-                if not fornecedores:
-                    print("Nenhum fornecedor encontrado.")
-                for fornecedor in fornecedores:
-                    print(f"ID: {fornecedor[0]} Nome: {fornecedor[1]} Telefone: {fornecedor[2]} Email: {fornecedor[3]}")
+                query = "INSERT INTO suppliers (name, phone, email) VALUES (%s, %s, %s)"
+                values = (name, phone, email)
+                cur.execute(query, values)
+        print(f"Supplier '{name}' created!")
+    except errors.CheckViolation:
+        print("Error: phone or email is required!")
     except Exception as e:
         print(f"Error: {e}")
-        
-def atualizar_fornecedor(id, nome, telefone, email):
+
+
+def list_suppliers():
     try:
         with connect() as conn:
             with conn.cursor() as cur:
-                cmd_atualizar_fornecedor = "UPDATE suppliers SET name = %s, phone = %s, email = %s WHERE id = %s"
-                valores = (nome, telefone, email, id)
-                cur.execute(cmd_atualizar_fornecedor, valores)
-        print("Fornecedor atualizado!")
+                cur.execute("SELECT * FROM suppliers")
+                suppliers = cur.fetchall()
+                if not suppliers:
+                    print("No suppliers found.")
+                    return
+                for supplier in suppliers:
+                    print(
+                        f"ID: {supplier[0]} | Name: {supplier[1]} | Phone: {supplier[2]} | Email: {supplier[3]}"
+                    )
     except Exception as e:
-        print(f"Erro: {e}")
-        
-def deletar_fornecedor(id):
+        print(f"Error: {e}")
+
+
+def update_supplier(id, name, phone, email):
     try:
         with connect() as conn:
             with conn.cursor() as cur:
-                cmd_deletar_fornecedor = "DELETE FROM suppliers WHERE id = %s"
-                valores = (id,)
-                cur.execute(cmd_deletar_fornecedor, valores)
-        print(f"Fornecedor deletado!")
+                query = "UPDATE suppliers SET name = %s, phone = %s, email = %s WHERE id = %s"
+                values = (name, phone, email, id)
+                cur.execute(query, values)
+        print("Supplier updated!")
+    except errors.CheckViolation:
+        print("Error: phone or email is required!")
     except Exception as e:
-        print(f"Erro: {e}")
-        
-def menu_fornecedor():
+        print(f"Error: {e}")
+
+
+def delete_supplier(id):
+    try:
+        with connect() as conn:
+            with conn.cursor() as cur:
+                query = "DELETE FROM suppliers WHERE id = %s"
+                values = (id,)
+                cur.execute(query, values)
+        print("Supplier deleted!")
+    except errors.ForeignKeyViolation:
+        print("Error: supplier has products — cannot delete!")
+    except Exception as e:
+        print(f"Error: {e}")
+
+
+def menu_suppliers():
     while True:
-        print("\n=== Fornecedores ===")
-        print("1 - Listar fornecedor")
-        print("2 - Criar fornecedor")
-        print("3 - Atualizar fornecedor")
-        print("4 - Deletar fornecedor")
-        print("0 - Sair")
-        
-        option = input("\nEscolha a opção: ")
+        print("\n=== SUPPLIERS ===")
+        print("1 - List suppliers")
+        print("2 - Create supplier")
+        print("3 - Update supplier")
+        print("4 - Delete supplier")
+        print("0 - Back")
+
+        option = input("\nChoose: ")
         os.system("clear")
-        
+
         match option:
             case "1":
-                listar_fornecedor()
+                list_suppliers()
             case "2":
-                nome_fornecedor = input("Nome: ")
-                telefone_fornecedor = input("Telefone: ").strip() or None
-                email_fornecedor = input("Email: ").strip() or None
-                criar_fornecedor(nome_fornecedor, telefone_fornecedor, email_fornecedor)
+                name = input("Name: ")
+                phone = input("Phone (leave blank to skip): ").strip() or None
+                email = input("Email (leave blank to skip): ").strip() or None
+                create_supplier(name, phone, email)
             case "3":
-                listar_fornecedor()
+                list_suppliers()
                 id = int(input("ID: "))
-                nome = input("Nome: ")
-                telefone = input("Telefone: ").strip() or None
-                email = input("Email: ").strip() or None
-                atualizar_fornecedor(id, nome, telefone, email)
+                name = input("New name: ")
+                phone = input("New phone (leave blank to skip): ").strip() or None
+                email = input("New email (leave blank to skip): ").strip() or None
+                update_supplier(id, name, phone, email)
             case "4":
-                listar_fornecedor()
+                list_suppliers()
                 id = int(input("ID: "))
-                deletar_fornecedor(id)
+                delete_supplier(id)
             case "0":
-                print("Voce saiu do sistema.")
+                print("Going back...")
                 break
             case _:
-                print("Opção inválida")
+                print("Invalid option!")

@@ -1,9 +1,12 @@
-from modules.categories import menu_categorias
-from modules.roles import menu_cargo
-from modules.suppliers import menu_fornecedor
+from modules.categories import menu_categories
+from modules.roles import menu_roles
+from modules.suppliers import menu_suppliers
+from modules.employees import menu_employees
+
 
 def main():
-    menu_fornecedor()
-    
+    menu_employees()
+
+
 if __name__ == "__main__":
     main()

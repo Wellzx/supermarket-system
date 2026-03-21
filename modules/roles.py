@@ -1,84 +1,94 @@
 import os
-from modules.database import connect
+from database import connect
+from psycopg import errors
 
-def criar_cargo(nome, salario_base):
+
+def create_role(name, base_salary):
     try:
         with connect() as conn:
             with conn.cursor() as cur:
-                cmd_criar_cargo = "INSERT INTO roles (name, base_salary) VALUES (%s, %s)"
-                valores = (nome, salario_base)
-                cur.execute(cmd_criar_cargo, valores)
-        print(f"Cargo {nome} criado!")
-    except Exception as e:
-            print(f"Erro: {e}")
-            
-def listar_cargo():
-    try:
-        with connect() as conn:
-            with conn.cursor() as cur:
-                cmd_listar_cargo = "SELECT * FROM roles"
-                cur.execute(cmd_listar_cargo)
-                cargos = cur.fetchall()
-                if not cargos:
-                    print("Nenhum cargo encontrado.")
-                for cargo in cargos:
-                    print(f"ID: {cargo[0]} Nome: {cargo[1]} Salário base: {cargo[2]}")
+                query = "INSERT INTO roles (name, base_salary) VALUES (%s, %s)"
+                values = (name, base_salary)
+                cur.execute(query, values)
+        print(f"Role '{name}' created!")
     except Exception as e:
         print(f"Error: {e}")
-        
-def atualizar_cargo(id, nome, salario_base):
+
+
+def list_roles():
     try:
         with connect() as conn:
             with conn.cursor() as cur:
-                cmd_atualizar_cargo = "UPDATE roles SET name = %s, base_salary = %s WHERE id = %s"
-                valores = (nome, salario_base, id)
-                cur.execute(cmd_atualizar_cargo, valores)
-        print("Cargo atualizado!")
+                cur.execute("SELECT * FROM roles")
+                roles = cur.fetchall()
+                if not roles:
+                    print("No roles found.")
+                    return
+                for role in roles:
+                    print(
+                        f"ID: {role[0]} | Name: {role[1]} | Base salary: R${role[2]:.2f}"
+                    )
     except Exception as e:
-        print(f"Erro: {e}")
-        
-def deletar_cargo(id):
+        print(f"Error: {e}")
+
+
+def update_role(id, name, base_salary):
     try:
         with connect() as conn:
             with conn.cursor() as cur:
-                cmd_deletar_cargo = "DELETE FROM roles WHERE id = %s"
-                valores = (id,)
-                cur.execute(cmd_deletar_cargo, valores)
-        print(f"Cargo deletado!")
+                query = "UPDATE roles SET name = %s, base_salary = %s WHERE id = %s"
+                values = (name, base_salary, id)
+                cur.execute(query, values)
+        print("Role updated!")
     except Exception as e:
-        print(f"Erro: {e}")
-        
-def menu_cargo():
+        print(f"Error: {e}")
+
+
+def delete_role(id):
+    try:
+        with connect() as conn:
+            with conn.cursor() as cur:
+                query = "DELETE FROM roles WHERE id = %s"
+                values = (id,)
+                cur.execute(query, values)
+        print("Role deleted!")
+    except errors.ForeignKeyViolation:
+        print("Error: role has employees — cannot delete!")
+    except Exception as e:
+        print(f"Error: {e}")
+
+
+def menu_roles():
     while True:
-        print("\n=== Cargo ===")
-        print("1 - Listar cargo")
-        print("2 - Criar cargo")
-        print("3 - Atualizar cargo")
-        print("4 - Deletar cargo")
-        print("0 - Sair")
-        
-        option = input("\nEscolha a opção: ")
+        print("\n=== ROLES ===")
+        print("1 - List roles")
+        print("2 - Create role")
+        print("3 - Update role")
+        print("4 - Delete role")
+        print("0 - Back")
+
+        option = input("\nChoose: ")
         os.system("clear")
-        
+
         match option:
             case "1":
-                listar_cargo()
+                list_roles()
             case "2":
-                nome_cargo = input("Nome: ")
-                salario_base_cargo = float(input("Salario base: "))
-                criar_cargo(nome_cargo, salario_base_cargo)
+                name = input("Name: ")
+                base_salary = float(input("Base salary: "))
+                create_role(name, base_salary)
             case "3":
-                listar_cargo()
+                list_roles()
                 id = int(input("ID: "))
-                nome = input("Nome: ")
-                salario_base = float(input("Salario base: "))
-                atualizar_cargo(id, nome, salario_base)
+                name = input("New name: ")
+                base_salary = float(input("New base salary: "))
+                update_role(id, name, base_salary)
             case "4":
-                listar_cargo()
+                list_roles()
                 id = int(input("ID: "))
-                deletar_cargo(id)
+                delete_role(id)
             case "0":
-                print("Voce saiu do sistema.")
+                print("Going back...")
                 break
             case _:
-                print("Opção inválida")
+                print("Invalid option!")

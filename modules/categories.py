@@ -1,82 +1,90 @@
 import os
-from modules.database import connect
+from database import connect
+from psycopg import errors
 
-def criar_categoria(nome):
+
+def create_category(name):
     try:
         with connect() as conn:
             with conn.cursor() as cur:
-                cmd_criar_categoria = "INSERT INTO categories (name) VALUES (%s)"
-                valores = (nome,)
-                cur.execute(cmd_criar_categoria, valores)
-        print(f"Categoria {nome} criada!")
+                query = "INSERT INTO categories (name) VALUES (%s)"
+                values = (name,)
+                cur.execute(query, values)
+        print(f"Category '{name}' created!")
     except Exception as e:
-        print(f"Erro: {e}")
-           
-def listar_categorias():
+        print(f"Error: {e}")
+
+
+def list_categories():
     try:
         with connect() as conn:
             with conn.cursor() as cur:
-                cmd_listar_categorias = "SELECT * FROM categories"
-                cur.execute(cmd_listar_categorias)
-                categorias = cur.fetchall()
-                if not categorias:
-                    print("Nenhuma categoria encontrada.")
-                for categoria in categorias:
-                    print(f"ID: {categoria[0]} Nome: {categoria[1]}")
+                cur.execute("SELECT * FROM categories")
+                categories = cur.fetchall()
+                if not categories:
+                    print("No categories found.")
+                    return
+                for category in categories:
+                    print(f"ID: {category[0]} | Name: {category[1]}")
     except Exception as e:
-        print(f"Erro: {e}")
-        
-def atualizar_categoria(id, nome):
+        print(f"Error: {e}")
+
+
+def update_category(id, name):
     try:
         with connect() as conn:
             with conn.cursor() as cur:
-                cmd_atualizar_categoria = "UPDATE categories SET name = %s WHERE id = %s"
-                valores = (nome, id)
-                cur.execute(cmd_atualizar_categoria, valores)
-        print("Categoria atualizada!")
+                query = "UPDATE categories SET name = %s WHERE id = %s"
+                values = (name, id)
+                cur.execute(query, values)
+        print("Category updated!")
     except Exception as e:
-        print(f"Erro: {e}")
-        
-def deletar_categoria(id):
+        print(f"Error: {e}")
+
+
+def delete_category(id):
     try:
         with connect() as conn:
             with conn.cursor() as cur:
-                cmd_deletar_categoria = "DELETE FROM categories WHERE id = %s"
-                valores = (id,)
-                cur.execute(cmd_deletar_categoria, valores)
-        print(f"Categoria deletada!")
+                query = "DELETE FROM categories WHERE id = %s"
+                values = (id,)
+                cur.execute(query, values)
+        print("Category deleted!")
+    except errors.ForeignKeyViolation:
+        print("Error: category has products — cannot delete!")
     except Exception as e:
-        print(f"Erro: {e}")
-        
-def menu_categorias():
+        print(f"Error: {e}")
+
+
+def menu_categories():
     while True:
-        print("\n=== Categorias ===")
-        print("1 - Listar categoria")
-        print("2 - Criar categoria")
-        print("3 - Atualizar categoria")
-        print("4 - Deletar categoria")
-        print("0 - Sair")
-        
-        option = input("\nEscolha a opção: ")
+        print("\n=== CATEGORIES ===")
+        print("1 - List categories")
+        print("2 - Create category")
+        print("3 - Update category")
+        print("4 - Delete category")
+        print("0 - Back")
+
+        option = input("\nChoose: ")
         os.system("clear")
-        
+
         match option:
             case "1":
-                listar_categorias()
+                list_categories()
             case "2":
-                nome_categoria = input("Nome: ")
-                criar_categoria(nome_categoria)
+                name = input("Name: ")
+                create_category(name)
             case "3":
-                listar_categorias()
+                list_categories()
                 id = int(input("ID: "))
-                nome = input("Nome: ")
-                atualizar_categoria(id, nome)
+                name = input("New name: ")
+                update_category(id, name)
             case "4":
-                listar_categorias()
+                list_categories()
                 id = int(input("ID: "))
-                deletar_categoria(id)
+                delete_category(id)
             case "0":
-                print("Voce saiu do sistema.")
+                print("Going back...")
                 break
             case _:
-                print("Opção inválida")     
+                print("Invalid option!")
