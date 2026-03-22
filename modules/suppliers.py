@@ -21,14 +21,24 @@ def list_suppliers():
     try:
         with connect() as conn:
             with conn.cursor() as cur:
-                cur.execute("SELECT * FROM suppliers")
+                query = "SELECT * FROM suppliers"
+                cur.execute(query)
                 suppliers = cur.fetchall()
+
                 if not suppliers:
                     print("No suppliers found.")
                     return
+
+                print("\n=== SUPPLIERS ===")
                 for supplier in suppliers:
+                    supplier_id, name, phone, email = supplier
                     print(
-                        f"ID: {supplier[0]} | Name: {supplier[1]} | Phone: {supplier[2]} | Email: {supplier[3]}"
+                        f"""
+ID: {supplier_id}
+Name: {name}
+Phone: {phone}
+Email: {email}
+"""
                     )
     except Exception as e:
         print(f"Error: {e}")
@@ -91,7 +101,7 @@ def menu_suppliers():
                 update_supplier(id, name, phone, email)
             case "4":
                 list_suppliers()
-                id = int(input("ID: "))
+                id = int(input("Supplier ID: "))
                 delete_supplier(id)
             case "0":
                 print("Going back...")

@@ -5,7 +5,7 @@ from modules.employees import menu_employees
 
 
 def main():
-    menu_employees()
+    menu_categories()
 
 
 if __name__ == "__main__":

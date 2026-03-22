@@ -19,14 +19,23 @@ def list_roles():
     try:
         with connect() as conn:
             with conn.cursor() as cur:
-                cur.execute("SELECT * FROM roles")
+                query = "SELECT * FROM roles"
+                cur.execute(query)
                 roles = cur.fetchall()
+
                 if not roles:
                     print("No roles found.")
                     return
+
+                print("\n=== ROLES ===")
                 for role in roles:
+                    role_id, name, base_salary = role
                     print(
-                        f"ID: {role[0]} | Name: {role[1]} | Base salary: R${role[2]:.2f}"
+                        f"""
+ID: {role_id}
+Name: {name}
+Base Salary: {base_salary:.2f}
+"""
                     )
     except Exception as e:
         print(f"Error: {e}")
@@ -85,7 +94,7 @@ def menu_roles():
                 update_role(id, name, base_salary)
             case "4":
                 list_roles()
-                id = int(input("ID: "))
+                id = int(input("Role ID: "))
                 delete_role(id)
             case "0":
                 print("Going back...")

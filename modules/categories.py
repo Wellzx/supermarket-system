@@ -19,13 +19,24 @@ def list_categories():
     try:
         with connect() as conn:
             with conn.cursor() as cur:
-                cur.execute("SELECT * FROM categories")
+                query = "SELECT * FROM categories"
+                cur.execute(query)
                 categories = cur.fetchall()
+
                 if not categories:
                     print("No categories found.")
                     return
+                
+                print("\n=== CATEGORIES ===")
                 for category in categories:
-                    print(f"ID: {category[0]} | Name: {category[1]}")
+                    category_id, name = category
+                    print(
+                        f"""
+ID: {category_id}
+Name: {name}
+"""
+                    )
+
     except Exception as e:
         print(f"Error: {e}")
 
@@ -81,7 +92,7 @@ def menu_categories():
                 update_category(id, name)
             case "4":
                 list_categories()
-                id = int(input("ID: "))
+                id = int(input("Category ID: "))
                 delete_category(id)
             case "0":
                 print("Going back...")

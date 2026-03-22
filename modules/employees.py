@@ -48,14 +48,18 @@ def list_employees():
                     return
 
                 print("\n=== EMPLOYEES ===")
-                for emp in employees:
-                    emp_id, name, cpf, role, base_salary, bonus_salary, total_salary = (
-                        emp
-                    )
+                for employee in employees:
+                    employee_id, name, cpf, role, base_salary, bonus_salary, total_salary = employee
                     print(
-                        f"ID: {emp_id} | Name: {name} | CPF: {cpf} | "
-                        f"Role: {role} | Salary: R${base_salary:.2f} | Bonus: R${bonus_salary} | "
-                        f"Total: R${total_salary}"
+                        f"""
+ID: {employee_id}
+Name: {name}
+CPF: {cpf}
+Role: {role}
+Base Salary: {base_salary:.2f}
+Bonus Salary: {bonus_salary:.2f}
+Total Salary: {total_salary:.2f}
+{'-' * 30}"""
                     )
     except Exception as e:
         print(f"Error: {e}")
