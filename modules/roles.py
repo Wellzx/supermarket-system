@@ -27,7 +27,6 @@ def list_roles():
                     print("No roles found.")
                     return
 
-                print("\n=== ROLES ===")
                 for role in roles:
                     role_id, name, base_salary = role
                     print(
@@ -35,7 +34,7 @@ def list_roles():
 ID: {role_id}
 Name: {name}
 Base Salary: {base_salary:.2f}
-"""
+{'-' * 30}"""
                     )
     except Exception as e:
         print(f"Error: {e}")
@@ -69,7 +68,7 @@ def delete_role(id):
 
 def menu_roles():
     while True:
-        print("\n=== ROLES ===")
+        print("=== ROLES ===")
         print("1 - List roles")
         print("2 - Create role")
         print("3 - Update role")

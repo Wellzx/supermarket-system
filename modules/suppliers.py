@@ -29,7 +29,6 @@ def list_suppliers():
                     print("No suppliers found.")
                     return
 
-                print("\n=== SUPPLIERS ===")
                 for supplier in suppliers:
                     supplier_id, name, phone, email = supplier
                     print(
@@ -38,7 +37,7 @@ ID: {supplier_id}
 Name: {name}
 Phone: {phone}
 Email: {email}
-"""
+{'-' * 30}"""
                     )
     except Exception as e:
         print(f"Error: {e}")
@@ -74,7 +73,7 @@ def delete_supplier(id):
 
 def menu_suppliers():
     while True:
-        print("\n=== SUPPLIERS ===")
+        print("=== SUPPLIERS ===")
         print("1 - List suppliers")
         print("2 - Create supplier")
         print("3 - Update supplier")

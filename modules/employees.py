@@ -13,8 +13,7 @@ def create_employee(name, cpf, role_id, bonus_salary=0):
                 """
                 values = (name, cpf, role_id, bonus_salary)
                 cur.execute(query, values)
-        print(f"Employee '{name}' created sucessfully!")
-
+        print(f"Employee '{name}' created!")
     except errors.UniqueViolation:
         print("Error: CPF already registered!")
     except errors.ForeignKeyViolation:
@@ -47,7 +46,6 @@ def list_employees():
                     print("No employees found.")
                     return
 
-                print("\n=== EMPLOYEES ===")
                 for employee in employees:
                     employee_id, name, cpf, role, base_salary, bonus_salary, total_salary = employee
                     print(
@@ -76,8 +74,7 @@ def update_employee(id, name, cpf, role_id, bonus_salary):
                 """
                 values = (id, name, cpf, role_id, bonus_salary)
                 cur.execute(query, values)
-
-        print("Employee updated successfully!")
+        print("Employee updated!")
 
     except errors.UniqueViolation:
         print("Error: CPF already registered!")
@@ -94,7 +91,7 @@ def delete_employee(id):
                 query = "DELETE FROM employees WHERE id = %s"
                 values = (id,)
                 cur.execute(query, values)
-        print("Employee deleted successfully!")
+        print("Employee deleted!")
 
     except errors.ForeignKeyViolation:
         print("Error: employee has sales registered - cannot delete!")
@@ -104,7 +101,7 @@ def delete_employee(id):
 
 def menu_employees():
     while True:
-        print("\n=== EMPLOYEES ===")
+        print("=== EMPLOYEES ===")
         print("1 - List employees")
         print("2 - Create employee")
         print("3 - Update employee")

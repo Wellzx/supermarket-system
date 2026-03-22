@@ -26,15 +26,14 @@ def list_categories():
                 if not categories:
                     print("No categories found.")
                     return
-                
-                print("\n=== CATEGORIES ===")
+
                 for category in categories:
                     category_id, name = category
                     print(
                         f"""
 ID: {category_id}
 Name: {name}
-"""
+{'-' * 30}"""
                     )
 
     except Exception as e:
@@ -69,7 +68,7 @@ def delete_category(id):
 
 def menu_categories():
     while True:
-        print("\n=== CATEGORIES ===")
+        print("=== CATEGORIES ===")
         print("1 - List categories")
         print("2 - Create category")
         print("3 - Update category")
