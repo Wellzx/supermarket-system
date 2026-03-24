@@ -30,7 +30,8 @@ def list_customers():
 
                 if not customers:
                     print("No customers found.")
-
+                    
+                print("\n=== Customers ===")
                 for customer in customers:
                     customer_id, name, cpf, phone, email = customer
                     print(

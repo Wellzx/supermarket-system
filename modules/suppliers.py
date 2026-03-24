@@ -29,6 +29,7 @@ def list_suppliers():
                     print("No suppliers found.")
                     return
 
+                print("\n=== Suppliers ===")
                 for supplier in suppliers:
                     supplier_id, name, phone, email = supplier
                     print(

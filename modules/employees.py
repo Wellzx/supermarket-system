@@ -45,7 +45,8 @@ def list_employees():
                 if not employees:
                     print("No employees found.")
                     return
-
+                
+                print("\n=== Employees ===")
                 for employee in employees:
                     employee_id, name, cpf, role, base_salary, bonus_salary, total_salary = employee
                     print(
@@ -92,7 +93,6 @@ def delete_employee(id):
                 values = (id,)
                 cur.execute(query, values)
         print("Employee deleted!")
-
     except errors.ForeignKeyViolation:
         print("Error: employee has sales registered - cannot delete!")
     except Exception as e:

@@ -26,7 +26,8 @@ def list_roles():
                 if not roles:
                     print("No roles found.")
                     return
-
+                
+                print("\n=== Roles ===")
                 for role in roles:
                     role_id, name, base_salary = role
                     print(

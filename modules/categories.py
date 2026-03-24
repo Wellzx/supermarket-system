@@ -26,7 +26,8 @@ def list_categories():
                 if not categories:
                     print("No categories found.")
                     return
-
+                
+                print("\n=== Categories ===")
                 for category in categories:
                     category_id, name = category
                     print(
