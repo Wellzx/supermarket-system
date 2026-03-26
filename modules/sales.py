@@ -11,7 +11,6 @@ def create_sale(customer_id, employee_id, items):
         with connect() as conn:
             with conn.cursor() as cur:
 
-                # 1. verifica estoque de cada item antes de vender
                 for product_id, quantity, unit_price in items:
                     cur.execute(
                         "SELECT stock, name FROM products WHERE id = %s",
@@ -28,10 +27,8 @@ def create_sale(customer_id, employee_id, items):
                         print(f"Insufficient stock for '{name}'. Available: {stock}")
                         return
 
-                # 2. calcula o total
                 total = sum(qty * price for _, qty, price in items)
 
-                # 3. insere a venda
                 query = """
                     INSERT INTO sales (customer_id, employee_id, total)
                     VALUES (%s, %s, %s)
@@ -41,7 +38,6 @@ def create_sale(customer_id, employee_id, items):
                 cur.execute(query, values)
                 sale_id = cur.fetchone()[0]
 
-                # 4. insere cada item e baixa o estoque
                 for product_id, quantity, unit_price in items:
                     cur.execute(
                         """
@@ -145,27 +141,23 @@ def delete_sale(sale_id):
         with connect() as conn:
             with conn.cursor() as cur:
 
-                # 1. busca os itens pra devolver o estoque
                 cur.execute(
                     "SELECT product_id, quantity FROM sale_items WHERE sale_id = %s",
                     (sale_id,)
                 )
                 items = cur.fetchall()
 
-                # 2. devolve o estoque de cada item
                 for product_id, quantity in items:
                     cur.execute(
                         "UPDATE products SET stock = stock + %s WHERE id = %s",
                         (quantity, product_id)
                     )
 
-                # 3. deleta os itens
                 cur.execute(
                     "DELETE FROM sale_items WHERE sale_id = %s",
                     (sale_id,)
                 )
 
-                # 4. deleta a venda
                 cur.execute(
                     "DELETE FROM sales WHERE id = %s",
                     (sale_id,)
@@ -213,7 +205,6 @@ def menu_sales():
                     product_id = int(product_input)
                     quantity = int(input("Quantity: "))
 
-                    # busca o preco atual do produto
                     try:
                         with connect() as conn:
                             with conn.cursor() as cur:
