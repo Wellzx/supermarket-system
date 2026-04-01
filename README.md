@@ -1,6 +1,6 @@
-# Supermarket System
+# Supermarket Management System (CLI)
 
-A terminal-based supermarket management system built with Python and PostgreSQL.
+A high-integrity relational database system designed for retail operations. This project focuses on SQL data consistency, automated inventory logic, and modular backend architecture using Python and PostgreSQL.
 
 ## Technologies
 
